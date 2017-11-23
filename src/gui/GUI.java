@@ -30,7 +30,6 @@ public class GUI {
 	
 //	private JCheckBox
 	
-	
 	private JPanel bottom = new JPanel();
 
 
