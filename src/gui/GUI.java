@@ -36,8 +36,6 @@ public class GUI {
 	private JButton makeConfig = new JButton("Make Config");
 	private JButton saveConfig = new JButton("Save Config");
 	
-//comment 
-	
 	public void go() {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
