@@ -28,7 +28,6 @@ public class GUI {
 	
 	private JPanel middleBottom = new JPanel();
 	
-//	private JCheckBox
 	
 	private JPanel bottom = new JPanel();
 
