@@ -1,10 +1,15 @@
 package gui;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
@@ -24,8 +29,23 @@ public class GUI {
 
 	private JPanel middle = new JPanel();
 	
+	private JPanel middleBottom = new JPanel();
+	private JPanel middleRight = new JPanel();
+	private JPanel middleLeft = new JPanel();
+	
+	private JLabel manual = new JLabel("Manual");
+	private JLabel rulesWeights = new JLabel("Regras            Pesos");
+	
+	private JTable middleTable = new JTable(5, 2);
+	
+	private JButton generate = new JButton("Gerar config");
+	private JButton evaluate = new JButton("Avaliar config");
+	private JButton save = new JButton("Gravar config");
+	
+	private JCheckBox fakeNegatives = new JCheckBox("Falsos Negativos");
+	private JCheckBox fakePositives = new JCheckBox("Falsos Positivos");
+	
 	private JPanel bottom = new JPanel();
-
 
 	public void go() {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -52,10 +72,29 @@ public class GUI {
 		frame.add(top);
 	}
 
-
 	private void buildMiddle() {
-		// TODO Auto-generated method stub
-
+		middle.setLayout(new BorderLayout());
+		middle.add(manual, BorderLayout.NORTH);
+		
+		manual.setHorizontalAlignment(JLabel.CENTER);
+		
+		middleRight.setLayout(new GridLayout(3,1));
+		middleRight.add(generate);
+		middleRight.add(evaluate);
+		middleRight.add(save);
+		middle.add(middleRight, BorderLayout.EAST);
+		
+		middleLeft.setLayout(new BorderLayout());
+		middleLeft.add(rulesWeights, BorderLayout.NORTH);
+		middleLeft.add(middleTable, BorderLayout.CENTER);
+		middle.add(middleLeft, BorderLayout.WEST);
+	    		
+		middleBottom.setLayout(new FlowLayout());
+		middleBottom.add(fakeNegatives);
+		middleBottom.add(fakePositives);
+		middle.add(middleBottom, BorderLayout.SOUTH);
+		
+		frame.add(middle);
 	}
 
 
