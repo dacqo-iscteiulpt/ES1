@@ -1,5 +1,7 @@
 package gui;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
@@ -16,13 +18,18 @@ public class GUI {
 	
 	private JLabel rules = new JLabel("rules.cf path: ");
 	private JLabel ham = new JLabel("ham.log path: ");
-	private JLabel spam = new JLabel("spamlog path: ");
+	private JLabel spam = new JLabel("spam.log path: ");
 	
 	private JTextField rulesPath = new JTextField("");
 	private JTextField hamPath = new JTextField("");
 	private JTextField spamPath = new JTextField("");
-
+	
 	private JPanel middle = new JPanel();
+	
+	private JPanel middleBottom = new JPanel();
+	
+//	private JCheckBox
+	
 	
 	private JPanel bottom = new JPanel();
 
@@ -54,14 +61,14 @@ public class GUI {
 
 
 	private void buildMiddle() {
-		// TODO Auto-generated method stub
-
+		middle.setLayout(new BorderLayout());
+		middleBottom.setLayout(new FlowLayout());
+		middle.add(middleBottom, BorderLayout.SOUTH);
 	}
 
 
 	private void buildBottom() {
 		// TODO Auto-generated method stub
-
 	}
 
 
