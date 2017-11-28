@@ -3,9 +3,9 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,15 +18,13 @@ public class GUI {
 	private JFrame frame = new JFrame("GUI");
 
 	private JPanel top = new JPanel();
-	
 	private JLabel rules = new JLabel("rules.cf path: ");
 	private JLabel ham = new JLabel("ham.log path: ");
-	private JLabel spam = new JLabel("spamlog path: ");
-	
+	private JLabel spam = new JLabel("spam.log path: ");
 	private JTextField rulesPath = new JTextField("");
 	private JTextField hamPath = new JTextField("");
 	private JTextField spamPath = new JTextField("");
-
+	
 	private JPanel middle = new JPanel();
 	
 	private JPanel middleBottom = new JPanel();
@@ -47,6 +45,15 @@ public class GUI {
 	
 	private JPanel bottom = new JPanel();
 
+	private JLabel automatic = new JLabel("                             Automatic");
+	private JPanel bottomPanel = new JPanel();
+	private JPanel bottomLeft = new JPanel();
+	private JLabel rulesWeight = new JLabel("Rules            Weights");
+	private JTable bottomTable = new JTable(5,2);
+	private JPanel bottomRight = new JPanel();
+	private JButton makeConfig = new JButton("Make Config");
+	private JButton saveConfig = new JButton("Save Config");
+	
 	public void go() {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -99,8 +106,24 @@ public class GUI {
 
 
 	private void buildBottom() {
-		// TODO Auto-generated method stub
-
+		bottom.setLayout(new BorderLayout());
+		bottom.add(automatic, BorderLayout.NORTH);		
+		bottom.add(bottomPanel);
+		
+		bottomPanel.setLayout(new FlowLayout());
+		bottomPanel.add(bottomLeft);
+		
+		bottomLeft.setLayout(new BorderLayout());
+		bottomLeft.add(rulesWeight, BorderLayout.NORTH);
+		bottomLeft.add(bottomTable);
+		
+		bottomRight.setLayout(new GridLayout(2,1));
+		bottomRight.add(makeConfig);
+		bottomRight.add(saveConfig);
+		
+		bottomPanel.add(bottomRight);
+		frame.add(bottom);
+		
 	}
 
 
