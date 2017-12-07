@@ -7,13 +7,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -52,8 +53,8 @@ public class GUI {
 	private JButton evaluate = new JButton("Avaliar config");
 	private JButton save = new JButton("Gravar config");
 
-	private JCheckBox fakeNegatives = new JCheckBox("Falsos Negativos");
-	private JCheckBox fakePositives = new JCheckBox("Falsos Positivos");
+	private JTextField fakeNegatives = new JTextField("Falsos Negativos:\t");
+	private JTextField fakePositives = new JTextField("Falsos Positivos:\t");
 
 	private JPanel bottom = new JPanel();
 
@@ -66,6 +67,9 @@ public class GUI {
 
 	private JButton makeConfig = new JButton("Gerar Config");
 	private JButton saveConfig = new JButton("Gravar Config");
+
+	private int falsosPositivos = 0;
+	private int falsosNegativos = 0;
 
 	public void go() {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -107,9 +111,7 @@ public class GUI {
 		middleRight.setLayout(new GridLayout(3,1));
 		middleRight.add(generate);
 		generate.addActionListener(new ActionListener() { 
-			public void actionPerformed(ActionEvent e) { 
-				System.out.println("XD");
-				System.out.println(data1.length);
+			public void actionPerformed(ActionEvent e) {
 				for(int i = 0; i < data1.length; i++) {
 					data1[i][1] = ThreadLocalRandom.current().nextDouble(-5, 5 + 1);
 				}
@@ -117,7 +119,27 @@ public class GUI {
 			} 
 		});
 		middleRight.add(evaluate);
+		evaluate.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) {
+				evaluateConfig();
+			} 
+		});
 		middleRight.add(save);
+		save.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) {
+				try {
+					PrintWriter writer = new PrintWriter("rules.txt", "UTF-8");
+					for(int i = 0; i < data1.length; i++) {
+						writer.write(data1[i][0] + " " + data1[i][1] +"\n");
+					}
+					writer.close();
+					System.out.println("saved to file");
+				} catch (FileNotFoundException | UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			} 
+		});
 		middle.add(middleRight, BorderLayout.EAST);
 
 		middleLeft.setLayout(new BorderLayout());
@@ -130,6 +152,63 @@ public class GUI {
 		middle.add(middleBottom, BorderLayout.SOUTH);
 
 		frame.add(middle);
+	}
+
+
+	protected void evaluateConfig() {
+		if(!hamPath.getText().isEmpty()) {
+			Scanner in;
+			try {
+				in = new Scanner(new FileReader(hamPath.getText()));
+				while(in.hasNext()) {
+					String text = in.nextLine();
+					String[] line = text.split("\t");
+					double count = 0;
+					for(int i = 1; i < line.length; i++) {
+						for(int j =  0; j < data1.length; j++)  {
+							if(line[i].equals((String)data1[j][0])) {
+								double amount = (double)data1[j][1];
+								count += amount;
+							}
+						}
+					}
+					if(count < 0) {
+						falsosPositivos++;
+					}
+				}
+			} catch (FileNotFoundException e) {
+				System.out.println("Path invalido");
+			}
+		}
+
+		if(!spamPath.getText().isEmpty()) {
+			Scanner in;
+			try {
+				in = new Scanner(new FileReader(spamPath.getText()));
+				while(in.hasNext()) {
+					String text = in.nextLine();
+					String[] line = text.split("\t");
+					double count = 0;
+					for(int i = 1; i < line.length; i++) {
+						for(int j =  0; j < data1.length; j++)  {
+							if(line[i].equals((String)data1[j][0])) {
+								double amount = (double)data1[j][1];
+								count += amount;
+							}
+						}
+					}
+					if(count < 0) {
+						falsosNegativos++;
+					}
+				}
+			} catch (FileNotFoundException e) {
+				System.out.println("Path invalido");
+			}
+		}
+		fakePositives.setText("Falsos Positivos: " + falsosPositivos);
+		fakeNegatives.setText("Falsos Negativos: " + falsosNegativos);
+		falsosNegativos = 0;
+		falsosPositivos = 0;
 	}
 
 
@@ -149,9 +228,9 @@ public class GUI {
 				int i = 0;
 				for(Regra r: Regras) {
 					data1[i][0] = r.getName();
-					data1[i][1] = 0;
+					data1[i][1] = 0.0;
 					data2[i][0] = r.getName();
-					data2[i][1] = 0;
+					data2[i][1] = 0.0;
 					i++;
 				}
 
