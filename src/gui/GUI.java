@@ -5,13 +5,12 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -22,7 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.table.TableModel;
+import javax.swing.table.DefaultTableModel;
 
 public class GUI {
 
@@ -38,7 +37,8 @@ public class GUI {
 
 	private JPanel middle = new JPanel();
 
-	private TableModel model1;
+	private DefaultTableModel model1;
+	private Object[][] data1;
 	private JTable middleTable = new JTable();
 
 	private JPanel middleBottom = new JPanel();
@@ -46,7 +46,7 @@ public class GUI {
 	private JPanel middleLeft = new JPanel();
 
 	private JLabel manual = new JLabel("Manual");
-
+	private final String[] columnNames = {"Regras", "Pesos"};
 
 	private JButton generate = new JButton("Gerar config");
 	private JButton evaluate = new JButton("Avaliar config");
@@ -59,8 +59,9 @@ public class GUI {
 
 	private JLabel automatic = new JLabel("Automatic");
 	private JPanel bottomLeft = new JPanel();
+	private DefaultTableModel model2;
+	private Object[][] data2;
 	private JTable bottomTable = new JTable();
-	private TableModel model2;
 	private JPanel bottomRight = new JPanel();
 
 	private JButton makeConfig = new JButton("Gerar Config");
@@ -105,25 +106,21 @@ public class GUI {
 
 		middleRight.setLayout(new GridLayout(3,1));
 		middleRight.add(generate);
+		generate.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) { 
+				System.out.println("XD");
+				System.out.println(data1.length);
+				for(int i = 0; i < data1.length; i++) {
+					data1[i][1] = ThreadLocalRandom.current().nextDouble(-5, 5 + 1);
+				}
+				model1.setDataVector(data1, columnNames);
+			} 
+		});
 		middleRight.add(evaluate);
 		middleRight.add(save);
 		middle.add(middleRight, BorderLayout.EAST);
 
 		middleLeft.setLayout(new BorderLayout());
-		middleTable.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-
-					int row = middleTable.getSelectedRow();
-					int column = middleTable.getSelectedColumn();
-					System.out.println("Row: " + row + ", Column: " + column);
-//					double temp = (double) model1.getValueAt(row, column);
-//					middleTable.setValueAt(temp, row, column);
-
-				}
-			}
-		});
 		middleLeft.add(new JScrollPane(middleTable), BorderLayout.CENTER);
 		middle.add(middleLeft, BorderLayout.WEST);
 
@@ -146,8 +143,20 @@ public class GUI {
 					String text = in.next();
 					Regras.add(new Regra(text, 0));
 				}
-				model1 = new CustomTableModel(Regras);
-				model2 = new CustomTableModel(Regras);
+
+				data1 = new Object[Regras.size()][2];
+				data2 = new Object[Regras.size()][2];
+				int i = 0;
+				for(Regra r: Regras) {
+					data1[i][0] = r.getName();
+					data1[i][1] = 0;
+					data2[i][0] = r.getName();
+					data2[i][1] = 0;
+					i++;
+				}
+
+				model1 = new DefaultTableModel(data1, columnNames);
+				model2 = new DefaultTableModel(data2, columnNames);
 				middleTable.setModel(model1);
 				bottomTable.setModel(model2);
 			} catch (FileNotFoundException e) {
@@ -161,7 +170,7 @@ public class GUI {
 		bottom.setLayout(new BorderLayout());
 		bottom.add(automatic, BorderLayout.NORTH);
 		automatic.setHorizontalAlignment(JLabel.CENTER);
-		
+
 		bottom.add(bottomLeft, BorderLayout.WEST);
 
 		bottomLeft.setLayout(new BorderLayout());
