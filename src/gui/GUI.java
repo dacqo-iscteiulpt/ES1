@@ -126,7 +126,7 @@ public class GUI {
  * This method builds the middle panel
  * which contains three buttons (generate, evaluate and save)
  * The generate button create a random number between -5 and 5
- * The evaluate button specifies 
+ * The evaluate button specifies
  * 
  * 
  * 
