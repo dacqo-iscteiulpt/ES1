@@ -24,6 +24,18 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * 
+ * This class implements all the components
+ * required to build the GUI
+ * 
+ * @author Micael
+ * @author David
+ * @version 
+ * @since 16-11-2017
+ *
+ */
+
 public class GUI {
 
 	private JFrame frame = new JFrame("GUI");
@@ -71,6 +83,10 @@ public class GUI {
 	private int falsosPositivos = 0;
 	private int falsosNegativos = 0;
 
+/**
+ * This method runs all 
+ * the methods and displays the GUI
+ */
 	public void go() {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -84,7 +100,11 @@ public class GUI {
 		});
 	}
 
-
+/**
+ * This method builds the top panel 
+ * which specifies the paths for the ham, spam and rules' files
+ * 
+ */
 	private void buildTop() {
 		top.setLayout(new GridLayout(3,2));
 		top.add(rules);
@@ -101,7 +121,16 @@ public class GUI {
 		top.add(spamPath);
 		frame.add(top);
 	}
-
+	
+/**
+ * This method builds the middle panel
+ * which contains three buttons (generate, evaluate and save)
+ * The generate button create a random number between -5 and 5
+ * The evaluate button specifies 
+ * 
+ * 
+ * 
+ */
 	private void buildMiddle() {
 		middle.setLayout(new BorderLayout());
 		middle.add(manual, BorderLayout.NORTH);
