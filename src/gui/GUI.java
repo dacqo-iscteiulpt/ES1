@@ -31,7 +31,8 @@ import javax.swing.table.DefaultTableModel;
  * 
  * @author Micael
  * @author David
- * @version 
+ * @author Daniel
+ * @author João (Javadoc)
  * @since 16-11-2017
  *
  */
@@ -102,9 +103,7 @@ public class GUI {
 
 /**
  * This method builds the top panel 
- * which specifies the paths for the ham, spam and rules' files
- * 
- */
+ * which specifies the paths for the ham, spam and rules' files */
 	private void buildTop() {
 		top.setLayout(new GridLayout(3,2));
 		top.add(rules);
@@ -124,13 +123,7 @@ public class GUI {
 	
 /**
  * This method builds the middle panel
- * which contains three buttons (generate, evaluate and save)
- * The generate button create a random number between -5 and 5
- * The evaluate button specifies
- * 
- * 
- * 
- */
+ * which contains three buttons (generate, evaluate and save).*/
 	private void buildMiddle() {
 		middle.setLayout(new BorderLayout());
 		middle.add(manual, BorderLayout.NORTH);
@@ -140,6 +133,8 @@ public class GUI {
 		middleRight.setLayout(new GridLayout(3,1));
 		middleRight.add(generate);
 		generate.addActionListener(new ActionListener() { 
+			
+/**The generate button create a random number between -5 and 5. */
 			public void actionPerformed(ActionEvent e) {
 				for(int i = 0; i < data1.length; i++) {
 					data1[i][1] = ThreadLocalRandom.current().nextDouble(-5, 5 + 1);
@@ -148,13 +143,16 @@ public class GUI {
 			} 
 		});
 		middleRight.add(evaluate);
-		evaluate.addActionListener(new ActionListener() { 
+		evaluate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				evaluateConfig();
 			} 
 		});
 		middleRight.add(save);
 		save.addActionListener(new ActionListener() { 
+			
+/** The save button adds the weights included 
+* in {@link GUI#data1} matrix to the rules.txt file. */
 			public void actionPerformed(ActionEvent e) {
 				try {
 					PrintWriter writer = new PrintWriter("rules.txt", "UTF-8");
@@ -183,7 +181,9 @@ public class GUI {
 		frame.add(middle);
 	}
 
-
+/** The evaluateConfig method determines the false negatives and false positives.
+*The former increments {@link GUI#falsosPositivos} 
+*and the latter increments {@link GUI#falsosNegativos}. */
 	protected void evaluateConfig() {
 		if(!hamPath.getText().isEmpty()) {
 			Scanner in;
@@ -240,7 +240,10 @@ public class GUI {
 		falsosPositivos = 0;
 	}
 
-
+/** The method readRules reads the file rules.txt
+ * and adds all its contents to an arraylist. 
+ * Then iterates the arraylist and writes to the matrix ({@link GUI#data1}, {@link GUI#data2}) the rule and 
+ * its respective weight.     */
 	private void readRules() {
 		if(!rulesPath.getText().isEmpty()) {
 			Scanner in;
@@ -273,7 +276,9 @@ public class GUI {
 		}
 	}
 
-
+/**
+* This method builds the bottom panel 
+* */
 	private void buildBottom() {
 		bottom.setLayout(new BorderLayout());
 		bottom.add(automatic, BorderLayout.NORTH);
