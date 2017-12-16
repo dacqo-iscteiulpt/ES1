@@ -2,19 +2,19 @@ package gui;
 
 public class Regra {
 	private String name;
-	private double peso;
+	private double weight;
 	
-	Regra(String name, double peso) {
+	public Regra(String name, double weight) {
 		this.setName(name);
-		this.setPeso(peso);
+		this.setWeight(weight);
 	}
 
-	public double getPeso() {
-		return peso;
+	public double getWeight() {
+		return weight;
 	}
 
-	public void setPeso(double peso) {
-		this.peso = peso;
+	public void setWeight(double weight) {
+		this.weight = weight;
 	}
 
 	public String getName() {
