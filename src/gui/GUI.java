@@ -10,7 +10,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.sql.Savepoint;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,34 +41,24 @@ import org.uma.jmetal.util.experiment.component.GenerateLatexTablesWithStatistic
 import org.uma.jmetal.util.experiment.component.GenerateReferenceParetoSetAndFrontFromDoubleSolutions;
 import org.uma.jmetal.util.experiment.util.ExperimentAlgorithm;
 import org.uma.jmetal.util.experiment.util.ExperimentProblem;
-
-import antiSpamFilter.AntiSpamFilterAutomaticConfiguration;
 import antiSpamFilter.AntiSpamFilterProblem;
 
 /**
- * <<<<<<< HEAD
+ * 
  * 
  * This class implements all the components required to build the GUI
  * 
- * ======= >>>>>>> branch 'master' of
- * https://github.com/dacqo-iscteiulpt/ES1-2017-IC1-65
  * 
  * @author Micael
  * @author David
  * @author Daniel
  * @author João (Javadoc)
- * @since 16-11-2017 This class implements all the components required to build
- *        the GUI
+ * @since 16-11-2017 
  */
 
 public class GUI {
 
 	private JFrame frame = new JFrame("GUI");
-
-	private JPanel top = new JPanel();
-	private JLabel rules = new JLabel("rules.cf path: ");
-	private JLabel ham = new JLabel("ham.log path: ");
-	private JLabel spam = new JLabel("spam.log path: ");
 
 	private JPanel topPanel = new JPanel();
 	private JLabel rulesLabel = new JLabel("rules.cf path: ");
@@ -88,12 +77,10 @@ public class GUI {
 	private JPanel middleBottomPanel = new JPanel();
 	private JPanel middleRightPanel = new JPanel();
 	private JPanel middleLeftPanel = new JPanel();
-	private JLabel manual = new JLabel("Manual");
 	private JLabel manualLabel = new JLabel("Manual");
 	private final String[] columnNames = { "Regras", "Pesos" };
 
 	private JButton generateButton = new JButton("Gerar config");
-	private JButton evaluateButton = new JButton("Avaliar config");
 	private JButton saveButton = new JButton("Gravar config");
 
 	private JTextField labelFN = new JTextField("Falsos Negativos:\t");
@@ -139,9 +126,6 @@ public class GUI {
 	 * spam and rules' files
 	 */
 	private void buildTop() {
-		top.setLayout(new GridLayout(3, 2));
-		top.add(rules);
-		top.add(rulesPath);
 		topPanel.setLayout(new GridLayout(3, 2));
 		topPanel.add(rulesLabel);
 		topPanel.add(rulesPath);
@@ -159,8 +143,8 @@ public class GUI {
 	}
 
 	/**
-	 * This method builds the middle panel which contains three buttons
-	 * (generate, evaluate and save).
+	 * This method builds the middle panel 
+	 * which contains three buttons(generate and save).
 	 */
 	private void buildMiddle() {
 		middlePanel.setLayout(new BorderLayout());
@@ -172,7 +156,7 @@ public class GUI {
 		middleRightPanel.add(generateButton);
 		generateButton.addActionListener(new ActionListener() { 
 
-			/**The generate button create a random number between -5 and 5. */
+			/**The generate button create a random number between -5 and 5 and calls evaluateConfig method */
 			public void actionPerformed(ActionEvent e) {
 				for(int i = 0; i < dataMatrixManual.length; i++) {
 					dataMatrixManual[i][1] = ThreadLocalRandom.current().nextDouble(-5, 5 + 1);
@@ -186,7 +170,7 @@ public class GUI {
 		saveButton.addActionListener(new ActionListener() { 
 
 			/** The save button adds the weights included 
-			 * in {@link GUI#dataMatrixManual} matrix to the rules.txt file. */
+			 * in {@link GUI#dataMatrixManual} matrix to the rules.cf file. */
 			public void actionPerformed(ActionEvent e) {
 				try {
 					PrintWriter writer = new PrintWriter("rules.cf", "UTF-8");
@@ -277,7 +261,7 @@ public class GUI {
 		counterFP = 0;
 	}
 
-	/** The method readRules reads the file rules.txt
+	/** The method readRules reads the file rules.cf
 	 * and adds all its contents to an arraylist. 
 	 * Then iterates the arraylist and writes to the matrix ({@link GUI#dataMatrixManual}, {@link GUI#dataMatrixAutomatic}) the rule and 
 	 * its respective weight.     */
@@ -315,7 +299,8 @@ public class GUI {
 	}
 
 	/**
-	 * This method builds the bottom panel
+	 * This method builds the bottom panel which 
+	 * contains {@link GUI#makeConfigButton} and {@link GUI#saveConfigButton}
 	 */
 	private void buildBottom() {
 		bottomPanel.setLayout(new BorderLayout());
@@ -337,6 +322,9 @@ public class GUI {
 
 		makeConfigButton.addActionListener(new ActionListener() {
 
+			/** The {@link GUI#makeConfigButton} calls 
+			 * two methods automaticConfig and evaluateConfig.
+			 */
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
@@ -350,7 +338,10 @@ public class GUI {
 		});
 
 		saveConfigButton.addActionListener(new ActionListener() {
-
+			/** 
+			 * The {@link GUI#saveConfigButton} adds the weights included 
+			 * in {@link GUI#dataMatrixAutomatic} matrix to the rules.cf file
+			 */
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
@@ -400,6 +391,9 @@ public class GUI {
 		readResults();
 	}
 
+	/** The method readResults reads the file bestHVvarPath
+	 * and adds the first line to the {@link GUI#dataMatrixAutomatic}
+	 */
 	private void readResults() {
 		Scanner in;
 		try {
