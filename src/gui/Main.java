@@ -5,6 +5,7 @@ public class Main {
 	public static void main(String[] args) {
 		GUI gui = new GUI();
 		gui.go();
+		
 //		String[] params = new String [2];
 //
 //		params[0] = "C:\\Program Files\\R\\R-3.4.1\\bin\\x64\\Rscript.exe";
