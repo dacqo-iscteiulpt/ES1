@@ -55,7 +55,7 @@ import antiSpamFilter.AntiSpamFilterProblem;
  * @author Micael
  * @author David
  * @author Daniel
- * @author Jo�o (Javadoc)
+ * @author Joao 
  * @since 16-11-2017 
  */
 
@@ -128,7 +128,7 @@ public class GUI {
 	 * This method builds the top panel which specifies the paths for the ham,
 	 * spam and rules' files 
 	 */
-	private void buildTop() {
+	public void buildTop() {
 		topPanel.setLayout(new GridLayout(3, 2));
 		topPanel.add(rulesLabel);
 		topPanel.add(rulesPath);
@@ -150,7 +150,7 @@ public class GUI {
 	 * This method builds the middle panel 
 	 * which contains three buttons(generate and save).
 	 */
-	private void buildMiddle() {
+	public void buildMiddle() {
 		middlePanel.setLayout(new BorderLayout());
 		middlePanel.add(manualLabel, BorderLayout.NORTH);
 
@@ -160,7 +160,10 @@ public class GUI {
 		middleRightPanel.add(generateButton);
 		generateButton.addActionListener(new ActionListener() { 
 
-			/**The generate button create a random number between -5 and 5 and calls evaluateConfig method */
+			/**
+			 * The generate button create a random number 
+			 * between -5 and 5 and calls evaluateConfig method 
+			*/			
 			public void actionPerformed(ActionEvent e) {
 				for(int i = 0; i < dataMatrixManual.length; i++) {
 					dataMatrixManual[i][1] = ThreadLocalRandom.current().nextDouble(-5, 5 + 1);
@@ -173,7 +176,10 @@ public class GUI {
 		saveButton.addActionListener(new ActionListener() { 
 
 			/** The save button adds the weights included 
-			 * in {@link GUI#dataMatrixManual} matrix to the rules.cf file. */
+			 * in {@link GUI#dataMatrixManual} matrix to the rules.cf file. 
+			 * @throws FileNotFoundException
+			 * @throws UnsupportedEncodingException
+			 */
 			public void actionPerformed(ActionEvent e) {
 				try {
 					PrintWriter writer = new PrintWriter("rules.cf", "UTF-8");
@@ -205,6 +211,7 @@ public class GUI {
 	 * The evaluateConfig method determines the false negatives and false
 	 * positives. The former increments {@link GUI#counterFP} and the
 	 * latter increments {@link GUI#counterFN}.
+	 * @param data is the matrix to be evaluated.
 	 */
 	public void evaluateConfig(Object[][] data) {
 		if (!hamPath.getText().isEmpty()) {
@@ -265,8 +272,10 @@ public class GUI {
 	/** The method readRules reads the file rules.cf
 	 * and adds all its contents to an arraylist. 
 	 * Then iterates the arraylist and writes to the matrix ({@link GUI#dataMatrixManual}, {@link GUI#dataMatrixAutomatic}) the rule and 
-	 * its respective weight.     */
-	private void readRules() {
+	 * its respective weight.     
+	 * 
+	*/
+	public void readRules() {
 		if (!rulesPath.getText().isEmpty()) {
 			Scanner in;
 			try {
@@ -303,7 +312,7 @@ public class GUI {
 	 * This method builds the bottom panel which 
 	 * contains {@link GUI#makeConfigButton} and {@link GUI#saveConfigButton}
 	 */
-	private void buildBottom() {
+	public void buildBottom() {
 		bottomPanel.setLayout(new BorderLayout());
 		bottomPanel.add(automaticLabel, BorderLayout.NORTH);
 		automaticLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -325,6 +334,7 @@ public class GUI {
 
 			/** The {@link GUI#makeConfigButton} calls 
 			 * two methods automaticConfig and evaluateConfig.
+			 * @throws IOException
 			 */
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -341,6 +351,8 @@ public class GUI {
 			/** 
 			 * The {@link GUI#saveConfigButton} adds the weights included 
 			 * in {@link GUI#dataMatrixAutomatic} matrix to the rules.cf file
+			 * @throws FileNotFoundException
+			 * @throws UnsupportedEncodingException
 			 */
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -362,7 +374,7 @@ public class GUI {
 		frame.add(bottomPanel);
 	}
 
-	private void automaticConfig() throws IOException {
+	public void automaticConfig() throws IOException {
 
 		final int INDEPENDENT_RUNS = 1;
 
@@ -394,9 +406,9 @@ public class GUI {
 
 	/** The method readResults reads the file Path
 	 * and adds the first line to the {@link GUI#dataMatrixAutomatic}
-	 * @throws IOException 
+	 * @throws IOException Signals that an I/O exception of some sort has occurred. 
 	 */
-	private void readResults() throws IOException {
+	public void readResults() throws IOException {
 		Scanner in;
 		try {
 			String x = "config/referenceFronts/AntiSpamFilterProblem.rf";
@@ -439,12 +451,12 @@ public class GUI {
 		return algorithms;
 	}
 
-	private void finishFrame() {
+	public void finishFrame() {
 		frame.pack();
 		frame.setVisible(true);
 	}
 
-	private void buildFrame() {
+	public void buildFrame() {
 		frame.setResizable(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new GridLayout(3, 1));
