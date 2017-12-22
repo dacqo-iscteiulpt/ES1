@@ -48,7 +48,6 @@ import antiSpamFilter.AntiSpamFilterProblem;
 
 /**
  * 
- * 
  * This class implements all the components required to build the GUI
  * 
  * 
