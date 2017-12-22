@@ -1,0 +1,44 @@
+Sprint #1
+
+Start Doing:
+- Fazer inspeção de código periodicamente
+- Introduzir os comentários Javadoc seguindo os seus princípios
+- Acabar uma tarefa antes de começar outra
+- Tornar os nomes das variáveis mais claros
+- Cumprir com os prazos definidos para realizar cada tarefa
+- Organizar o código
+- Realizar sprint reviews e daily scrum meetings
+- Priorizar tarefas
+- Estudar funcionamento da ferramenta JMetal
+
+Stop List:
+- Código pouco organizado
+- Desorganização na realização das tarefas e seus prazos
+- Nomes de variáveis pouco claros
+- Falta de comunicação entre developers e scrum master
+
+Continue:
+- Desenvolver código a pares quando necessário
+- Desenvolver código incrementalmente
+- Atribuição de tarefas a cada membro da equipa antecipadamente
+
+----------------------------------------------------------------------------------
+Sprint #2
+
+Start Doing:
+- Ter atenção em verificar se alterações simultâneas em zonas iguais de código entram em conflito
+
+Stop List:
+- Alterações simultâneas nas mesmas zonas de código que entram em conflito
+- Esquecimento de fazer commits, pull, push ou branch
+
+Continue:
+- Cumprir com os prazos definidos para realizar cada tarefa
+- Desenvolver código a pares quando necessário
+- Atribuição de tarefas a acada membro da equipa antecipadamente
+- Manter o código organizado
+- Variáveis com nomes claros
+- Manter uma inspeção de código periódica
+- Comunicação constante entre scrum master e developers
+
+----------------------------------------------------------------------------------
