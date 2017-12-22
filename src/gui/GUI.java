@@ -10,8 +10,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
@@ -52,7 +55,7 @@ import antiSpamFilter.AntiSpamFilterProblem;
  * @author Micael
  * @author David
  * @author Daniel
- * @author João (Javadoc)
+ * @author Joï¿½o (Javadoc)
  * @since 16-11-2017 
  */
 
@@ -91,19 +94,19 @@ public class GUI {
 	private JLabel automaticLabel = new JLabel("Automatic");
 	private JPanel bottomLeftPanel = new JPanel();
 	private DefaultTableModel automaticTableModel;
-	private Object[][] dataMatrixAutomatic;
+	public Object[][] dataMatrixAutomatic;
 	private JTable automaticTable = new JTable();
 	private JPanel bottomRightPanel = new JPanel();
 
 	private JButton makeConfigButton = new JButton("Gerar Config");
 	private JButton saveConfigButton = new JButton("Gravar Config");
 
-	private int counterFP = 0;
-	private int counterFN = 0;
+	public int counterFP = 0;
+	public int counterFN = 0;
 
-	private String bestHVvarPath = "config/AntiSpamStudy/data/NSGAII/AntiSpamFilterProblem/BEST_HV_VAR.tsv";
+	private String Path = "config/referenceFronts/AntiSpamFilterProblem.rs";
 
-	private List<Regra> Regras;
+	private List<Regra> regras;
 
 	/**
 	 * This method runs all the methods and displays the GUI
@@ -123,7 +126,7 @@ public class GUI {
 
 	/**
 	 * This method builds the top panel which specifies the paths for the ham,
-	 * spam and rules' files
+	 * spam and rules' files 
 	 */
 	private void buildTop() {
 		topPanel.setLayout(new GridLayout(3, 2));
@@ -133,6 +136,7 @@ public class GUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				readRules();
+				//				evaluateConfig(dataMatrixManual);
 			}
 		});
 		topPanel.add(hamLabel);
@@ -163,7 +167,6 @@ public class GUI {
 				}
 				manualTableModel.setDataVector(dataMatrixManual, columnNames);
 				evaluateConfig(dataMatrixManual);
-
 			} 
 		});
 		middleRightPanel.add(saveButton);
@@ -203,9 +206,10 @@ public class GUI {
 	 * positives. The former increments {@link GUI#counterFP} and the
 	 * latter increments {@link GUI#counterFN}.
 	 */
-	protected void evaluateConfig(Object[][] data) {
+	public void evaluateConfig(Object[][] data) {
 		if (!hamPath.getText().isEmpty()) {
 			Scanner in;
+			counterFP = 0;
 			try {
 				in = new Scanner(new FileReader(hamPath.getText()));
 				while (in.hasNext()) {
@@ -213,9 +217,9 @@ public class GUI {
 					String[] line = text.split("\t");
 					double count = 0;
 					for(int i = 1; i < line.length; i++) {
-						for(int j =  0; j < dataMatrixManual.length; j++)  {
-							if(line[i].equals((String)dataMatrixManual[j][0])) {
-								double amount = (double)dataMatrixManual[j][1];
+						for(int j =  0; j < data.length; j++)  {
+							if(line[i].equals((String)data[j][0])) {
+								double amount = (double)data[j][1];
 								count += amount;
 							}
 						}
@@ -231,6 +235,7 @@ public class GUI {
 
 		if (!spamPath.getText().isEmpty()) {
 			Scanner in;
+			counterFN = 0;
 			try {
 				in = new Scanner(new FileReader(spamPath.getText()));
 				while (in.hasNext()) {
@@ -238,9 +243,9 @@ public class GUI {
 					String[] line = text.split("\t");
 					double count = 0;
 					for(int i = 1; i < line.length; i++) {
-						for(int j =  0; j < dataMatrixManual.length; j++)  {
-							if(line[i].equals((String)dataMatrixManual[j][0])) {
-								double amount = (double)dataMatrixManual[j][1];
+						for(int j =  0; j < data.length; j++)  {
+							if(line[i].equals((String)data[j][0])) {
+								double amount = (double)data[j][1];
 								count += amount;
 							}
 						}
@@ -254,11 +259,7 @@ public class GUI {
 			}
 		}
 		labelFP.setText("Falsos Positivos: " + counterFP);
-		System.out.println(counterFP);
 		labelFN.setText("Falsos Negativos: " + counterFN);
-		System.out.println(counterFN);
-		counterFN = 0;
-		counterFP = 0;
 	}
 
 	/** The method readRules reads the file rules.cf
@@ -270,21 +271,21 @@ public class GUI {
 			Scanner in;
 			try {
 				in = new Scanner(new FileReader(rulesPath.getText()));
-				Regras = new ArrayList<Regra>();
+				regras = new ArrayList<Regra>();
 				while (in.hasNext()) {
 					String line = in.nextLine();
 					String[] rule = line.split(" ");
-					Regras.add(new Regra(rule[0], Double.parseDouble(rule[1])));
+					regras.add(new Regra(rule[0], Double.parseDouble(rule[1])));
 				}
 
-				dataMatrixManual = new Object[Regras.size()][2];
-				dataMatrixAutomatic = new Object[Regras.size()][2];
+				dataMatrixManual = new Object[regras.size()][2];
+				dataMatrixAutomatic = new Object[regras.size()][2];
 				int i = 0;
-				for (Regra r : Regras) {
+				for (Regra r : regras) {
 					dataMatrixManual[i][0] = r.getName();
 					dataMatrixManual[i][1] = r.getWeight();
 					dataMatrixAutomatic[i][0] = r.getName();
-					dataMatrixAutomatic[i][1] = r.getWeight();
+					dataMatrixAutomatic[i][1] = 0.0;
 					i++;
 				}
 
@@ -329,9 +330,8 @@ public class GUI {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					automaticConfig();
-					evaluateConfig(dataMatrixAutomatic);
+					//					evaluateConfig(dataMatrixAutomatic);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -369,7 +369,7 @@ public class GUI {
 		String experimentBaseDirectory = "config";
 
 		List<ExperimentProblem<DoubleSolution>> problemList = new ArrayList<>();
-		problemList.add(new ExperimentProblem<>(new AntiSpamFilterProblem(Regras.size())));
+		problemList.add(new ExperimentProblem<>(new AntiSpamFilterProblem(regras.size(),this)));
 
 		List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> algorithmList = configureAlgorithmList(
 				problemList);
@@ -389,23 +389,36 @@ public class GUI {
 		new GenerateBoxplotsWithR<>(experiment).setRows(1).setColumns(1).run();
 
 		readResults();
+
 	}
 
-	/** The method readResults reads the file bestHVvarPath
+	/** The method readResults reads the file Path
 	 * and adds the first line to the {@link GUI#dataMatrixAutomatic}
+	 * @throws IOException 
 	 */
-	private void readResults() {
+	private void readResults() throws IOException {
 		Scanner in;
 		try {
-			in = new Scanner(new FileReader(bestHVvarPath));
-			String[] weights = in.nextLine().split(" ");
+			String x = "config/referenceFronts/AntiSpamFilterProblem.rf";
+			ArrayList<Double> temp = new ArrayList<Double>();
+			in = new Scanner(new FileReader(x));
+			while(in.hasNextLine()) {
+				String[] line;
+				line = in.nextLine().split(" ");
+				temp.add(Double.parseDouble(line[1]));
+			}
+			in.close();
+			int minIndex = (int)temp.indexOf(Collections.min(temp));
+			String minLine = Files.readAllLines(Paths.get(Path)).get(minIndex);
+			String[] weights = minLine.split(" ");
 			int i = 0;
-			for (Regra r : Regras) {
+			for (Regra r : regras) {
 				dataMatrixAutomatic[i][1] = Double.parseDouble(weights[i]);
 				i++;
 			}
 			automaticTableModel = new DefaultTableModel(dataMatrixAutomatic, columnNames);
 			automaticTable.setModel(automaticTableModel);
+			evaluateConfig(dataMatrixAutomatic);
 		} catch (FileNotFoundException e) {
 			System.out.println("Path invalido");
 		}
@@ -419,7 +432,7 @@ public class GUI {
 			Algorithm<List<DoubleSolution>> algorithm = new NSGAIIBuilder<>(problemList.get(i).getProblem(),
 					new SBXCrossover(1.0, 5),
 					new PolynomialMutation(1.0 / problemList.get(i).getProblem().getNumberOfVariables(), 10.0))
-					.setMaxEvaluations(25000).setPopulationSize(100).build();
+					.setMaxEvaluations(100).setPopulationSize(100).build();
 			algorithms.add(new ExperimentAlgorithm<>(algorithm, "NSGAII", problemList.get(i).getTag()));
 		}
 
