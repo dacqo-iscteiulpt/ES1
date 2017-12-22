@@ -1,6 +1,5 @@
-setwd("C:/Users/Micael/Desktop/ES/ES1-2017-IC1-65/config/AntiSpamStudy/")
 postscript("HV.Boxplot.eps", horizontal=FALSE, onefile=FALSE, height=8, width=12, pointsize=10)
-resultDirectory<-"C:/Users/Micael/Desktop/ES/ES1-2017-IC1-65/config/AntiSpamStudy/"
+resultDirectory<-"../data"
 qIndicator <- function(indicator, problem)
 {
 fileNSGAII<-paste(resultDirectory, "NSGAII", sep="/")
