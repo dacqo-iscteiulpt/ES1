@@ -55,7 +55,7 @@ import antiSpamFilter.AntiSpamFilterProblem;
  * @author Micael
  * @author David
  * @author Daniel
- * @author Jo�o (Javadoc)
+ * @author Joao 
  * @since 16-11-2017 
  */
 
@@ -136,7 +136,6 @@ public class GUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				readRules();
-				//				evaluateConfig(dataMatrixManual);
 			}
 		});
 		topPanel.add(hamLabel);
@@ -148,7 +147,7 @@ public class GUI {
 
 	/**
 	 * This method builds the middle panel 
-	 * which contains three buttons(generate and save).
+	 * which contains three buttons (generate and save).
 	 */
 	private void buildMiddle() {
 		middlePanel.setLayout(new BorderLayout());
@@ -160,7 +159,10 @@ public class GUI {
 		middleRightPanel.add(generateButton);
 		generateButton.addActionListener(new ActionListener() { 
 
-			/**The generate button create a random number between -5 and 5 and calls evaluateConfig method */
+			/**
+			 * The generate button create a random number 
+			 * between -5 and 5 and calls evaluateConfig method 
+			*/
 			public void actionPerformed(ActionEvent e) {
 				for(int i = 0; i < dataMatrixManual.length; i++) {
 					dataMatrixManual[i][1] = ThreadLocalRandom.current().nextDouble(-5, 5 + 1);
@@ -173,7 +175,10 @@ public class GUI {
 		saveButton.addActionListener(new ActionListener() { 
 
 			/** The save button adds the weights included 
-			 * in {@link GUI#dataMatrixManual} matrix to the rules.cf file. */
+			 * in {@link GUI#dataMatrixManual} matrix to the rules.cf file. 
+			 * @throws FileNotFoundException
+			 * @throws UnsupportedEncodingException
+			 */
 			public void actionPerformed(ActionEvent e) {
 				try {
 					PrintWriter writer = new PrintWriter("rules.cf", "UTF-8");
@@ -205,11 +210,13 @@ public class GUI {
 	 * The evaluateConfig method determines the false negatives and false
 	 * positives. The former increments {@link GUI#counterFP} and the
 	 * latter increments {@link GUI#counterFN}.
+	 * @param data is the matrix to be evaluated.
 	 */
 	public void evaluateConfig(Object[][] data) {
 		if (!hamPath.getText().isEmpty()) {
 			Scanner in;
 			counterFP = 0;
+			
 			try {
 				in = new Scanner(new FileReader(hamPath.getText()));
 				while (in.hasNext()) {
@@ -265,7 +272,9 @@ public class GUI {
 	/** The method readRules reads the file rules.cf
 	 * and adds all its contents to an arraylist. 
 	 * Then iterates the arraylist and writes to the matrix ({@link GUI#dataMatrixManual}, {@link GUI#dataMatrixAutomatic}) the rule and 
-	 * its respective weight.     */
+	 * its respective weight.     
+	 * 
+	*/
 	private void readRules() {
 		if (!rulesPath.getText().isEmpty()) {
 			Scanner in;
@@ -325,12 +334,12 @@ public class GUI {
 
 			/** The {@link GUI#makeConfigButton} calls 
 			 * two methods automaticConfig and evaluateConfig.
+			 * throws IOException
 			 */
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					automaticConfig();
-					//					evaluateConfig(dataMatrixAutomatic);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -338,9 +347,12 @@ public class GUI {
 		});
 
 		saveConfigButton.addActionListener(new ActionListener() {
+		
 			/** 
 			 * The {@link GUI#saveConfigButton} adds the weights included 
 			 * in {@link GUI#dataMatrixAutomatic} matrix to the rules.cf file
+			 * @throws FileNotFoundException
+			 * @throws UnsupportedEncodingException
 			 */
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -353,7 +365,6 @@ public class GUI {
 					System.out.println("saved to file");
 					evaluateConfig(dataMatrixAutomatic);
 				} catch (FileNotFoundException | UnsupportedEncodingException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -394,7 +405,7 @@ public class GUI {
 
 	/** The method readResults reads the file Path
 	 * and adds the first line to the {@link GUI#dataMatrixAutomatic}
-	 * @throws IOException 
+	 * @throws IOException Signals that an I/O exception of some sort has occurred. 
 	 */
 	private void readResults() throws IOException {
 		Scanner in;
