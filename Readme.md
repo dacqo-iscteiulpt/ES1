@@ -1,4 +1,4 @@
-IC1
+﻿IC1
 //
 Grupo 65
 
@@ -7,6 +7,6 @@ Grupo 65
 74276, Micael Prata, Developer
 73453, João Gomes, Quality Manager
 
-AntiSpamConfigurationForLeisureMailBox
+AntiSpamConfigurationForLeisureMailBox 
 
-Link para um vídeo no youtube com a demonstração da aplicação final desenvolvida (ex: http://...)
+Link: https://www.youtube.com/watch?v=dzbMZoYZvFk
